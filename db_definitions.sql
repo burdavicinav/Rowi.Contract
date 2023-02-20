@@ -17,7 +17,7 @@ create table contract (
   id_type integer not null references contract_type(id),
   id_client integer not null references client(id_client),
   stat integer not null default 0,
-  value_contract decimal(18,6),
+  value_contract decimal(18,6) not null,
   number varchar(30) not null,
   descr varchar(255),
   

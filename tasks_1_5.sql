@@ -1,4 +1,6 @@
--- 1
+/*
+1) Список клиентов, имеющие действующие договора.
+*/
 SELECT distinct
 	cl.id_client,
     cl.inn,
@@ -11,8 +13,11 @@ FROM
       cl.id_client = c.id_client
 WHERE
 	c.stat = 0;
-  
--- 2
+ 
+/* 
+2) Список клиентов, имеющих более 3 различных типов договоров. Клиент в список должен
+попасть только один раз.
+*/
 SELECT
 	cl.id_client,
     cl.inn,
@@ -30,7 +35,9 @@ group BY
 HAVING
   count(distinct c.id_type) > 3;
   
--- 3
+/*
+3) Получить отчет со списком количества клиентов в разрезе типов договоров.
+*/
 SELECT
 	c.id_type,
     count(distinct cl.id_client) as cnt
@@ -45,18 +52,22 @@ WHERE
 group BY
 	c.id_type;
     
--- 4
+/*
+4) Получить отчет со списком количества договоров с незаполненным (NULL) комментарием.
+*/
 SELECT
   id_type,
   stat,
-  coalesce(sum(case when descr is null then 1 else 0 end), 0) as cnt
+  sum(iif(descr is null, 1, 0)) as cnt
 FROM
-	contract
+  contract
 group BY
   id_type,
   stat;
-  
--- 5
+
+/*  
+5) Вывести эффективную ставку по каждому договору
+*/
 SELECT
 	cl.nameclient,
     c.number,
